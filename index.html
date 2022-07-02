@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Online Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./styles/side-bar.css">
+  <link rel="stylesheet" href="./styles/filters-list.css">
+  <link rel="stylesheet" href="./styles/double-slider.css">
+  <link rel="stylesheet" href="./styles/search-box.css">
+  <link rel="stylesheet" href="./styles/cards-list.css">
+  <link rel="stylesheet" href="./styles/card.css">
+  <link rel="stylesheet" href="./styles/pagination.css">
+  <link rel="stylesheet" href="./styles/cart.css">
+</head>
+<body>
+  <div id="root" class="wrapper"></div>
+
+  <script type="module">
+    import OnlineStorePage from "./index.js";
+
+    const page = new OnlineStorePage()
+    const rootElement = document.querySelector('#root')
+
+    rootElement.append(page.element)
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  vertical-align: middle;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+}
+
+:root {
+  --c-primary: #7e72f2;
+  --c-basic: #2c2c2c;
+  --c-light-grey: #ededed;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.main-container {
+  grid-gap: 20px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+
+.os-pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
