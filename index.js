@@ -2,6 +2,7 @@ import CardsList from "./components/cards-list/index.js";
 import Pagination from './components/pagination/index.js';
 import SearchBox from './components/search-box/index.js';
 import SideBar from './components/side-bar/index.js';
+import Cart from './components/cart/index.js';
 
 const BACKEND_URL = 'https://online-store.bootcamp.place/api/'
 
@@ -48,27 +49,35 @@ export default class OnlineStorePage {
 
   getTemplate () {
     return `
-      <div class="page">
-        <header>
-
-        </header>
-        <main class="main-container">
-          <aside class="os-sidebar-container" data-element="sideBar">
-            <!-- Side Bar component -->
-          </aside>
-          <section>
-            <div data-element="searchBox">
-              <!-- Search Box component -->
-            </div>
-            <div data-element="cardsList">
-              <!-- Cards List component -->
-            </div>
-            <div class="os-pagination-container" data-element="pagination">
-              <!-- Pagination component -->
-            </div>
-          </section>
-        </main>
-      </div>
+      <div class="page" data-element="page">
+        <div class="page-wrapper">
+          <header class="os-header">
+            <span class="os-page-title">Simple Store</span>
+            
+            <button class="os-btn os-cart-btn" data-element="cartBtn">
+              <div class="os-cart-btn__icon"></div>
+              <span>Cart</span>
+            </button>
+          </header>
+          <main class="main-container">
+            <aside class="os-sidebar-container" data-element="sideBar">
+              <!-- Side Bar component -->
+            </aside>
+            <section>
+              <div data-element="searchBox">
+                <!-- Search Box component -->
+              </div>
+              <div data-element="cardsList">
+                <!-- Cards List component -->
+              </div>
+              <div class="os-pagination-container" data-element="pagination">
+                <!-- Pagination component -->
+              </div>
+            </section>
+          </main>
+        </div>
+        <!-- Cart Modal component -->
+      </div>      
     `
   }
 
@@ -82,11 +91,13 @@ export default class OnlineStorePage {
     })
     const searchBox = new SearchBox()
     const sideBar = new SideBar()
+    const cart = new Cart()
 
     this.components.cardsList = cardsList
     this.components.pagination = pagination
     this.components.searchBox = searchBox
     this.components.sideBar = sideBar
+    this.components.cart = cart
   }
 
   render () {
@@ -107,6 +118,8 @@ export default class OnlineStorePage {
     paginationContainer.append(this.components.pagination.element)
     searchBoxContainer.append(this.components.searchBox.element)
     sideBarContainer.append(this.components.sideBar.element)
+
+    this.element.appendChild(this.components.cart.element)
   }
 
   initEventListeners () {
@@ -128,10 +141,22 @@ export default class OnlineStorePage {
       this.filtersPanel = filtersArr.length ? '&' + filtersArr.join('&') : ''
       this.update('q')
     })
+
+    this.components.sideBar.element.addEventListener('filters-reset', event => {
+      this.filtersPanel = ''
+      this.components.searchBox.reset()
+      this.filters.q = ''
+      this.update('q')
+    })
+
+    const cartBtn = this.element.querySelector('[data-element="cartBtn"]')
+    cartBtn.addEventListener('click', event => {
+      this.components.cart.open()
+    })
   }
 
   async update (filterName, filtervalue) {
-    if (filterName && filtervalue) {
+    if (filterName && (typeof filtervalue === 'number' || typeof filtervalue === 'string')) {
       this.filters[filterName] = filtervalue
     }
     if (filterName === 'q') this.filters._page = 1

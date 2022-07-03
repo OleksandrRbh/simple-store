@@ -53,6 +53,11 @@ export default class SideBar {
       const filterString = `${filterName}_gte=${value.from}&${filterName}_lte=${value.to}`
       this.setFilters({ isActive: true, filter: filterString, filterType: 'filterSlider', filterName })
     })
+
+    const resetBtn = this.element.querySelector('[data-element="reset"]')
+    resetBtn.addEventListener('click', event => {
+      this.resetFilters()
+    })
   }
 
   setFilters (payload) {
@@ -74,10 +79,25 @@ export default class SideBar {
     this.dispatchFilterChangeEvent()
   }
 
+  resetFilters () {
+    this.components.categoryFilter.element.reset()
+    this.components.brandsFilter.element.reset()
+    this.components.priceFilter.reset()
+    this.components.ratingFilter.reset()
+
+    this.activeFilters = []
+    this.dispatchFiltersResetEvent()
+  }
+
   dispatchFilterChangeEvent () {
     const customEvent = new CustomEvent('filters-changed', {
       detail: this.activeFilters
     })
+    this.element.dispatchEvent(customEvent)
+  }
+
+  dispatchFiltersResetEvent () {
+    const customEvent = new CustomEvent('filters-reset')
     this.element.dispatchEvent(customEvent)
   }
 
@@ -138,8 +158,8 @@ export default class SideBar {
         <div class="os-sidebar__filters" data-element="filters">
           <!-- filters -->
         </div>
-
-        <!-- reset button -->
+        
+        <button class="os-btn os-sidebar__reset-btn" data-element="reset">Clear all filters</button>
       </div>
     `
   }

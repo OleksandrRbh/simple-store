@@ -20,6 +20,11 @@
   background-color: var(--c-primary);
   text-transform: uppercase;
   cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.card__button:hover {
+  background-color: var(--c-primary-dark);
 }
 
 .card__content {
@@ -48,6 +53,7 @@
 .card__info .info-raiting {
   gap: 11px;
   border-radius: 3px;
+  cursor: auto;
 }
 
 .card__info .info-title {

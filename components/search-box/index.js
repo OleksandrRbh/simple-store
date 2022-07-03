@@ -47,4 +47,10 @@ export default class SearchBox {
 
     this.element.dispatchEvent(customEvent)
   }, 250);
+
+  reset () {
+    const searchInput = this.element.querySelector('[data-element="search"]')
+    searchInput.value = ''
+    this.searchValue = ''
+  }
 }
