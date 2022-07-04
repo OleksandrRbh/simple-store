@@ -2,6 +2,7 @@ export default class Card {
   constructor(productData) {
     this.state = productData
     this.render()
+    this.initEventListeners()
   }
 
   getTemplate () {
@@ -28,7 +29,7 @@ export default class Card {
           </div>
         </div>
 
-        <button class="card__action-button card__button">Add To Cart</button>
+        <button class="card__action-button card__button" data-element="addToCart">Add To Cart</button>
       </div>
     `
   }
@@ -42,5 +43,19 @@ export default class Card {
   update (data = {}) {
     this.state = data
     this.element.innerHTML = this.getTemplate()
+  }
+
+  initEventListeners () {
+    const addToCartBtn = this.element.querySelector('[data-element="addToCart"]')
+    addToCartBtn.addEventListener('click', event => {
+      this.dispatchAddToCartEvent(this.state)
+    })
+  }
+
+  dispatchAddToCartEvent (productData) {
+    this.element.dispatchEvent(new CustomEvent('add-to-cart', {
+      detail: productData,
+      bubbles: true
+    }))
   }
 }

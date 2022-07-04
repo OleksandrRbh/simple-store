@@ -10,6 +10,7 @@ export default class OnlineStorePage {
   constructor () {
     this.components = {}
     this.products = []
+    this.cartProducts = []
     this.totalElements = 100
     this.filters = {
       _page: 1,
@@ -26,7 +27,6 @@ export default class OnlineStorePage {
     this.initEventListeners()
 
     this.update('_page', 1)
-    console.log('this', this)
   }
 
   async loadData () {
@@ -56,7 +56,7 @@ export default class OnlineStorePage {
             
             <button class="os-btn os-cart-btn" data-element="cartBtn">
               <div class="os-cart-btn__icon"></div>
-              <span>Cart</span>
+              <span>Cart <span data-element="cartQuantity"></span></span>
             </button>
           </header>
           <main class="main-container">
@@ -153,6 +153,59 @@ export default class OnlineStorePage {
     cartBtn.addEventListener('click', event => {
       this.components.cart.open()
     })
+
+    this.components.cardsList.element.addEventListener('add-to-cart', event => {
+      this.addProductToCart(event.detail)
+    })
+
+    this.components.cart.element.addEventListener('decrement-cart-product', event => {
+      this.decrementCartProduct(event.detail)
+    })
+
+    this.components.cart.element.addEventListener('increment-cart-product', event => {
+      this.incrementCartProduct(event.detail)
+    })
+  }
+
+  decrementCartProduct (id) {
+    const cartItem = this.cartProducts.find((item) => item.id === id)
+    if (cartItem.quantity > 1) {
+      cartItem.quantity--
+    } else {
+      const idx = this.cartProducts.findIndex((item) => item.id === id)
+      this.cartProducts.splice(idx, 1)
+    }
+    this.updateCartData()
+  }
+
+  incrementCartProduct (id) {
+    const cartItem = this.cartProducts.find((item) => item.id === id)
+    cartItem.quantity++
+    this.updateCartData()
+  }
+
+  addProductToCart (product) {
+    const cartItem = this.cartProducts.find(item => item.id === product.id)
+    if (cartItem) {
+      cartItem.quantity += 1
+    } else {
+      product.quantity = 1
+      this.cartProducts.push(product)
+    }
+    this.updateCartData()
+  }
+
+  updateCartData () {
+    const totalQuantity = this.getTotalQuantity(this.cartProducts)
+    this.element.querySelector('[data-element="cartQuantity"]').innerHTML = totalQuantity
+    this.components.cart.update(this.cartProducts)
+  }
+
+  getTotalQuantity (products) {
+    if (!products.length) return ''
+    return products.reduce((acc, cur) => {
+      return acc + cur.quantity
+    }, 0)
   }
 
   async update (filterName, filtervalue) {
@@ -170,8 +223,6 @@ export default class OnlineStorePage {
       this.components.pagination.update(totalPages)
       this.components.cardsList.update(products)
     }
-
-    console.log(this.filters);
   }
 }
 

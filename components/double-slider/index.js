@@ -39,8 +39,6 @@ export default class DoubleSlider {
         newRight = 100 - left;
       }
 
-      console.error(111);
-
       this.dragging.style.right = this.subElements.progress.style.right = newRight + '%';
       this.subElements.to.innerHTML = this.formatValue(this.getValue().to);
     }
